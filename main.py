@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtCore import QCoreApplication
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QAction
+from PyQt5.QtCore import QCoreApplication, Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QAction, QMessageBox, QCheckBox
 from PyQt5.QtGui import QIcon
 
 
@@ -38,11 +38,27 @@ class DungeonCrawler(QMainWindow):
         self.toolBar = self.addToolBar("Grugg")
         self.toolBar.addAction(extract_action)
 
+        check_box = QCheckBox("Enlarge Window", self)
+        check_box.move(100, 25)
+        check_box.stateChanged.connect(self.enlarge_window)
+
         self.show()
 
+    def enlarge_window(self, state):
+        if state == Qt.Checked:
+            self.setGeometry(50, 50, 1920, 1080)
+        else:
+            self.setGeometry(50, 50, 1000, 750)
+
     def close_application(self):
-        print("closing application")
-        sys.exit()
+        choice = QMessageBox.question(self, "Exit",
+                                      "Close the Application?",
+                                      QMessageBox.Yes | QMessageBox.No)
+        if choice == QMessageBox.Yes:
+            print("closing application")
+            sys.exit()
+        else:
+            pass
 
 
 def run():
